@@ -4,7 +4,7 @@ export default function RootLayout() {
   return (
     <Tabs screenOptions={{ headerShown: false }}>
       <Tabs.Screen
-        name="index"
+        name="(home)"
         options={{
           title: "Home",
         }}

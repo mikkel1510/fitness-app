@@ -7,11 +7,11 @@ export default function Index() {
       <View style={styles.row}>
         <Link href="./split" asChild>
           <Pressable style={styles.box}>
-            <Image source={require("../../../assets/images/icons/logbook.png")} style={styles.image}></Image>
+            <Image source={require("../../../assets/images/icons/calendar-249.png")} style={styles.image}></Image>
             <Text style={styles.text}>Workout Split</Text>
           </Pressable>
         </Link>
-        <Link href="./split" asChild>
+        <Link href="./log" asChild>
           <Pressable style={styles.box}>
             <Pressable></Pressable>
             <Image source={require("../../../assets/images/icons/logbook.png")} style={styles.image}></Image>
@@ -21,16 +21,16 @@ export default function Index() {
       </View>
 
       <View style={styles.row}>
-        <Link href="./split" asChild>
+        <Link href="./exercises" asChild>
           <Pressable style={styles.box}>
-            <Image source={require("../../../assets/images/icons/logbook.png")} style={styles.image}></Image>
+            <Image source={require("../../../assets/images/icons/lifting.png")} style={styles.image}></Image>
             <Text style={styles.text}>Exercises</Text>
           </Pressable>
         </Link>
         <Link href="./split" asChild>
           <Pressable style={styles.box}>
             <Image source={require("../../../assets/images/icons/logbook.png")} style={styles.image}></Image>
-            <Text style={styles.text}>Timer</Text>
+            <Text style={styles.text}>Something</Text>
           </Pressable>
         </Link>
       </View>

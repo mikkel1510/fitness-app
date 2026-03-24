@@ -6,7 +6,7 @@ export default function Split(){
         <View>
             <Link href="/" asChild>
                 <Pressable>
-                    <Text>Hello</Text>
+                    <Text>See your training split here!</Text>
                 </Pressable>
             </Link>
         </View>
