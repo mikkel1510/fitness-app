@@ -21,8 +21,6 @@ export default function Login(){
 
         test()
     }
-
-
     
     const [logInEmail, onChangeLoginEmail] = useState("")
     const [logInPassword, onChangeLoginPassword] = useState("")

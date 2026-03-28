@@ -1,3 +1,4 @@
+import { AuthProvider } from "@/AuthContext";
 import { Stack } from "expo-router";
 import { SQLiteDatabase, SQLiteProvider } from 'expo-sqlite';
 
@@ -17,15 +18,17 @@ export default function AuthLayout(){
 
     return(
         <SQLiteProvider databaseName="test.db" onInit={createDbIfNeeded}>
-            <Stack screenOptions={{ headerShown: false }}>
-                <Stack.Protected guard={!isLoggedIn}>
-                    <Stack.Screen name="index"/>
-                </Stack.Protected>
+            <AuthProvider>
+                <Stack screenOptions={{ headerShown: false }}>
+                    <Stack.Protected guard={!isLoggedIn}>
+                        <Stack.Screen name="index"/>
+                    </Stack.Protected>
 
-                <Stack.Protected guard={isLoggedIn}>
-                    <Stack.Screen name="(tabs)"/>
-                </Stack.Protected>
-            </Stack>
+                    <Stack.Protected guard={isLoggedIn}>
+                        <Stack.Screen name="(tabs)"/>
+                    </Stack.Protected>
+                </Stack>
+            </AuthProvider>
         </SQLiteProvider>
     )
 }
