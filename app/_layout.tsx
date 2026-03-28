@@ -1,17 +1,31 @@
 import { Stack } from "expo-router";
+import { SQLiteDatabase, SQLiteProvider } from 'expo-sqlite';
 
-const isLoggedIn = false; //Placeholder until proper auth
+const isLoggedIn = true; //Placeholder until proper auth
 
 export default function AuthLayout(){
-    return(
-        <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Protected guard={!isLoggedIn}>
-                <Stack.Screen name="index"/>
-            </Stack.Protected>
 
-            <Stack.Protected guard={isLoggedIn}>
-                <Stack.Screen name="(tabs)"/>
-            </Stack.Protected>
-        </Stack>
+    const createDbIfNeeded = async (db: SQLiteDatabase) => {
+        console.log("Creating databse")
+        await db.execAsync(
+            `
+            CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT, password TEXT);
+            CREATE TABLE IF NOT EXISTS notes (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, text TEXT);
+            `
+        )
+    }
+
+    return(
+        <SQLiteProvider databaseName="test.db" onInit={createDbIfNeeded}>
+            <Stack screenOptions={{ headerShown: false }}>
+                <Stack.Protected guard={!isLoggedIn}>
+                    <Stack.Screen name="index"/>
+                </Stack.Protected>
+
+                <Stack.Protected guard={isLoggedIn}>
+                    <Stack.Screen name="(tabs)"/>
+                </Stack.Protected>
+            </Stack>
+        </SQLiteProvider>
     )
 }
