@@ -1,17 +1,13 @@
 import { useAuth } from "@/AuthContext";
 import { Button } from "@/components/Button";
 import { User } from "@/types/User";
+import { router } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { useState } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 
 export default function Login(){   
     const db = useSQLiteContext();
-    
-    const test = async () => {
-        const result = await db.getAllAsync("SELECT * FROM users");
-        console.log(result);
-    };
     
     const signUp = async () => {
         await db.runAsync(
@@ -20,8 +16,6 @@ export default function Login(){
             signUpEmail,
             signUpPassword
         )
-
-        test()
     }
 
     const signIn = async() => {
@@ -30,7 +24,10 @@ export default function Login(){
             logInEmail,
             logInPassword
         )
-        if (user) setCurrentUser(user);
+        if (user) {
+            setCurrentUser(user);
+            router.replace("./(app)");
+        }
         else console.log("No user found") // TODO: FIX THIS BIH
     }
 

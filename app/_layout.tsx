@@ -1,10 +1,8 @@
 import { AuthProvider } from "@/AuthContext";
-import { Stack } from "expo-router";
-import { SQLiteDatabase, SQLiteProvider } from 'expo-sqlite';
+import { Slot } from "expo-router";
+import { SQLiteDatabase, SQLiteProvider } from "expo-sqlite";
 
-const isLoggedIn = false; //TODO: Placeholder until proper auth
-
-export default function AuthLayout(){
+export default function RootLayout(){
 
     const createDbIfNeeded = async (db: SQLiteDatabase) => {
         await db.execAsync(
@@ -15,18 +13,10 @@ export default function AuthLayout(){
         )
     }
 
-    return(
+    return( 
         <SQLiteProvider databaseName="test.db" onInit={createDbIfNeeded}>
             <AuthProvider>
-                <Stack screenOptions={{ headerShown: false }}>
-                    <Stack.Protected guard={!isLoggedIn}>
-                        <Stack.Screen name="index"/>
-                    </Stack.Protected>
-
-                    <Stack.Protected guard={isLoggedIn}>
-                        <Stack.Screen name="(tabs)"/>
-                    </Stack.Protected>
-                </Stack>
+                <Slot/>
             </AuthProvider>
         </SQLiteProvider>
     )

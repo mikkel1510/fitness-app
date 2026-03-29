@@ -3,7 +3,7 @@ import { User } from "./types/User";
 
 interface AuthContextType {
     currentUser: User | null,
-    setCurrentUser: (user: User | null) => void
+    setCurrentUser: (user: User | null) => void,
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
