@@ -2,12 +2,11 @@ import { AuthProvider } from "@/AuthContext";
 import { Stack } from "expo-router";
 import { SQLiteDatabase, SQLiteProvider } from 'expo-sqlite';
 
-const isLoggedIn = true; //Placeholder until proper auth
+const isLoggedIn = false; //TODO: Placeholder until proper auth
 
 export default function AuthLayout(){
 
     const createDbIfNeeded = async (db: SQLiteDatabase) => {
-        console.log("Creating databse")
         await db.execAsync(
             `
             CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT, password TEXT);

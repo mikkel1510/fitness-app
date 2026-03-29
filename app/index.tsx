@@ -1,4 +1,6 @@
+import { useAuth } from "@/AuthContext";
 import { Button } from "@/components/Button";
+import { User } from "@/types/User";
 import { useSQLiteContext } from "expo-sqlite";
 import { useState } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
@@ -21,6 +23,18 @@ export default function Login(){
 
         test()
     }
+
+    const signIn = async() => {
+        const user = await db.getFirstAsync<User>(
+            "SELECT * FROM users WHERE email = ? AND password = ?",
+            logInEmail,
+            logInPassword
+        )
+        if (user) setCurrentUser(user);
+        else console.log("No user found") // TODO: FIX THIS BIH
+    }
+
+    const { currentUser, setCurrentUser } = useAuth()
     
     const [logInEmail, onChangeLoginEmail] = useState("")
     const [logInPassword, onChangeLoginPassword] = useState("")
@@ -50,7 +64,7 @@ export default function Login(){
                     secureTextEntry={true}  
                 />
                 
-                <Button text="Log in" onPress={() => {}}></Button>
+                <Button text="Log in" onPress={() => signIn()}></Button>
             </View>
             <View>
                 <Text>Sign up</Text>
