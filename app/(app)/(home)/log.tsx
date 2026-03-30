@@ -1,26 +1,40 @@
+import { useAuth } from "@/AuthContext";
 import { Button } from "@/components/Button";
 import { useSQLiteContext } from "expo-sqlite";
-import { useState } from "react";
-import { Text, TextInput, View } from "react-native";
+import { useEffect, useState } from "react";
+import { FlatList, Text, TextInput, View } from "react-native";
 
 export default function Log(){
+
+    const { currentUser } = useAuth()
     const db = useSQLiteContext()
 
     const insertLog = async () => {
-        await db.runAsync(
-            "INSERT INTO notes (user_id, text) VALUES (?, ?)",
-            1,
-            text
-        )
-        getLogs()
+        if (text){
+            await db.runAsync(
+                "INSERT INTO notes (user_id, text) VALUES (?, ?)",
+                currentUser!.id,
+                text
+            )
+            getLogs()
+        }
     }
 
     const getLogs = async () => {
-        const result = await db.getAllAsync("SELECT * FROM notes");
-        console.log(result)
+        const result = await db.getAllAsync(
+            "SELECT * FROM notes WHERE user_id = ?", 
+            currentUser!.id
+        );
+        setLogs(result)
     }
 
+    const [logs, setLogs] = useState<any[]>([])
+
     const [text, onChangeText] = useState("")
+
+    useEffect(() => {
+        getLogs()
+    }, [])
 
     return(
         <View>
@@ -28,6 +42,11 @@ export default function Log(){
             <Text>Note</Text>
             <TextInput value={text} onChangeText={onChangeText} placeholder="Write your note here"/>
             <Button text="Save note"  onPress={insertLog}></Button>
+            <FlatList
+                data={logs}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={({item}) => <Text>{item.text}</Text>} //TODO: Replace with some type of "note" component
+            />
         </View>
     )
 }
