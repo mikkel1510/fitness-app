@@ -1,13 +1,6 @@
-import { useAuth } from "@/AuthContext";
-import { Redirect, Tabs } from "expo-router";
+import { Tabs } from "expo-router";
 
-export default function AuthLayout(){
-
-    const { currentUser } = useAuth()
-
-    if (!currentUser){
-        return <Redirect href="/"/>
-    }
+export default function AppLayout(){
 
     return (
         <Tabs screenOptions={{ headerShown: false }}>

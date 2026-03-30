@@ -1,5 +1,5 @@
-import { AuthProvider } from "@/AuthContext";
-import { Slot } from "expo-router";
+import { AuthProvider, useAuth } from "@/AuthContext";
+import { Stack } from "expo-router";
 import { SQLiteDatabase, SQLiteProvider } from "expo-sqlite";
 
 export default function RootLayout(){
@@ -12,12 +12,27 @@ export default function RootLayout(){
             `
         )
     }
-
     return( 
         <SQLiteProvider databaseName="test.db" onInit={createDbIfNeeded}>
             <AuthProvider>
-                <Slot/>
+                <RootNavigator/>
             </AuthProvider>
         </SQLiteProvider>
     )
+}
+
+function RootNavigator(){
+    const { currentUser } = useAuth()
+
+    return(
+        <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Protected guard={!currentUser}>
+                <Stack.Screen name={"index"} options={{ animation: "slide_from_bottom", animationDuration: 350 }}/>
+            </Stack.Protected>
+            <Stack.Protected guard={currentUser != null}>
+                <Stack.Screen name={"(app)"} options={{ animation: "fade", animationDuration: 350 }}/>
+            </Stack.Protected>
+        </Stack>
+    )
+
 }

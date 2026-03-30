@@ -1,7 +1,6 @@
 import { useAuth } from "@/AuthContext";
 import { Button } from "@/components/Button";
 import { User } from "@/types/User";
-import { router } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { useState } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
@@ -26,7 +25,6 @@ export default function Login(){
         )
         if (user) {
             setCurrentUser(user);
-            router.replace("./(app)");
         }
         else console.log("No user found") // TODO: FIX THIS BIH
     }
