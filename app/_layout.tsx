@@ -1,4 +1,5 @@
 import { AuthProvider, useAuth } from "@/AuthContext";
+import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import { SQLiteDatabase, SQLiteProvider } from "expo-sqlite";
 
@@ -12,6 +13,15 @@ export default function RootLayout(){
             `
         )
     }
+
+    const [loaded] = useFonts({
+        ByteBounce: require("../assets/fonts/PublicPixel.ttf")
+    })
+
+    if (!loaded){
+        return null
+    }
+
     return( 
         <SQLiteProvider databaseName="test.db" onInit={createDbIfNeeded}>
             <AuthProvider>

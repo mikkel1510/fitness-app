@@ -1,14 +1,16 @@
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { typography } from "@/styles";
+import { StyleSheet, Text, TouchableOpacity, ViewStyle } from "react-native";
 
 type ButtonProps = {
     text: string
     onPress: () => void
+    style?: ViewStyle | ViewStyle[]
 }
 
 
 export function Button(props: ButtonProps){
     return(
-        <TouchableOpacity style={styles.frame} onPress={props.onPress}>
+        <TouchableOpacity style={[styles.frame, props.style]} onPress={props.onPress}>
             <Text style={styles.text}>{props.text}</Text>
         </TouchableOpacity>
     )
@@ -18,9 +20,10 @@ const styles = StyleSheet.create({
     frame: {
         backgroundColor: "black",
         padding: 10,
-        borderRadius: 10
+        borderRadius: 10,
     },
     text: {
-        color: "white"
+        color: "white",
+        fontFamily: typography.regular
     }
 })

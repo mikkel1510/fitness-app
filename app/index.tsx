@@ -1,5 +1,6 @@
 import { useAuth } from "@/AuthContext";
 import { Button } from "@/components/Button";
+import { typography } from "@/styles";
 import { User } from "@/types/User";
 import { useSQLiteContext } from "expo-sqlite";
 import { useState } from "react";
@@ -44,7 +45,7 @@ export default function Login(){
         <View style={styles.container}>
             { isLogin ? (
                 <View>
-                    <Text>
+                    <Text style={styles.header}>
                         Login here
                     </Text>
                     
@@ -64,14 +65,16 @@ export default function Login(){
                     />
                     
                     <Button text="Log in" onPress={() => signIn()}></Button>
+
                     {incorrectInput && <Text style={styles.warning}>Incorrect email or password</Text>}
+                    
                     <Pressable onPress={() => setIsLogin(false)}>
-                        <Text>Sign up</Text>
+                        <Text style={{fontFamily: typography.regular}}>Sign up</Text>
                     </Pressable>
                 </View>
             ) : (
                 <View>
-                    <Text>Sign up</Text>
+                    <Text style={styles.header}>Sign up</Text>
 
                     <TextInput 
                         placeholder="Name" 
@@ -96,8 +99,9 @@ export default function Login(){
                     />
                     
                     <Button text="Sign up" onPress={() => signUp()}></Button>
+                    
                     <Pressable onPress={() => setIsLogin(true)}>
-                        <Text>Back to login</Text>
+                        <Text style={{fontFamily: typography.regular}}>Back to login</Text>
                     </Pressable>
                 </View>
             )
@@ -119,10 +123,15 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         padding: 10,
         width: 200,
-        margin: 5
+        margin: 5,
+        fontFamily: typography.regular
+    },
+    header: {
+        fontFamily: typography.regular
     },
     warning: {
         color: "red",
-        fontWeight: "bold"
-    }
+        fontWeight: "bold",
+        fontFamily: typography.regular
+    },
 })
