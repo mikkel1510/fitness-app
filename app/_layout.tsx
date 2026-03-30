@@ -1,17 +1,38 @@
+import { AuthProvider, useAuth } from "@/AuthContext";
 import { Stack } from "expo-router";
+import { SQLiteDatabase, SQLiteProvider } from "expo-sqlite";
 
-const isLoggedIn = false; //Placeholder until proper auth
+export default function RootLayout(){
 
-export default function AuthLayout(){
+    const createDbIfNeeded = async (db: SQLiteDatabase) => {
+        await db.execAsync(
+            `
+            CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT, password TEXT);
+            CREATE TABLE IF NOT EXISTS notes (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, text TEXT);
+            `
+        )
+    }
+    return( 
+        <SQLiteProvider databaseName="test.db" onInit={createDbIfNeeded}>
+            <AuthProvider>
+                <RootNavigator/>
+            </AuthProvider>
+        </SQLiteProvider>
+    )
+}
+
+function RootNavigator(){
+    const { currentUser } = useAuth()
+
     return(
         <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Protected guard={!isLoggedIn}>
-                <Stack.Screen name="index"/>
+            <Stack.Protected guard={!currentUser}>
+                <Stack.Screen name={"index"} options={{ animation: "slide_from_bottom", animationDuration: 350 }}/>
             </Stack.Protected>
-
-            <Stack.Protected guard={isLoggedIn}>
-                <Stack.Screen name="(tabs)"/>
+            <Stack.Protected guard={currentUser != null}>
+                <Stack.Screen name={"(app)"} options={{ animation: "fade", animationDuration: 350 }}/>
             </Stack.Protected>
         </Stack>
     )
+
 }
