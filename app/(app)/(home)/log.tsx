@@ -39,19 +39,21 @@ export default function Log(){
 
     return(
         <View>
-            <Text style={globalStyles.text}>Log your training progress here!</Text>
-            <Text style={globalStyles.text}>Note</Text>
-            <TextInput 
-                value={text} 
-                onChangeText={onChangeText} 
-                placeholder="Write your note here"
-                style={[globalStyles.input, {width: "auto"}]}
-            />
-            <Button text="Save note"  onPress={insertLog}></Button>
+            <View style={globalStyles.section}>
+                <Text style={globalStyles.text}>Note</Text>
+                <TextInput 
+                    value={text} 
+                    onChangeText={onChangeText} 
+                    placeholder="Write your note here"
+                    style={[globalStyles.input, {width: "auto"}]}
+                />
+                <Button text="Save note"  onPress={insertLog}></Button>
+            </View>
             <FlatList
                 data={logs}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({item}) => <Text style={globalStyles.text}>{item.text}</Text>} //TODO: Replace with some type of "note" component
+                style={globalStyles.section}
             />
         </View>
     )

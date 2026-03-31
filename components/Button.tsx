@@ -2,8 +2,8 @@ import { typography } from "@/styles";
 import { StyleSheet, Text, TouchableOpacity, ViewStyle } from "react-native";
 
 type ButtonProps = {
-    text: string
     onPress: () => void
+    text?: string
     style?: ViewStyle | ViewStyle[]
 }
 

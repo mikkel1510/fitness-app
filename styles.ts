@@ -17,5 +17,12 @@ export const globalStyles = StyleSheet.create({
         width: 200,
         margin: 5,
         fontFamily: typography.regular,
+        backgroundColor: "white"
     },
+    section: {
+        backgroundColor: "lavender",
+        borderRadius: 20,
+        padding: 10,
+        margin: 20
+    }
 })
