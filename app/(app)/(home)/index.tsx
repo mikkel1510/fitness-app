@@ -1,3 +1,4 @@
+import { globalStyles } from "@/styles";
 import { Link } from "expo-router";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 
@@ -8,14 +9,14 @@ export default function Index() {
         <Link href="./split" asChild>
           <Pressable style={styles.box}>
             <Image source={require("../../../assets/images/icons/calendar-249.png")} style={styles.image}></Image>
-            <Text style={styles.text}>Workout Split</Text>
+            <Text style={[globalStyles.text, {textAlign: "center"}]}>Workout Split</Text>
           </Pressable>
         </Link>
         <Link href="./log" asChild>
           <Pressable style={styles.box}>
             <Pressable></Pressable>
             <Image source={require("../../../assets/images/icons/logbook.png")} style={styles.image}></Image>
-            <Text style={styles.text}>Log</Text>
+            <Text style={[globalStyles.text, {textAlign: "center"}]}>Log</Text>
           </Pressable>  
         </Link>
       </View>
@@ -24,13 +25,13 @@ export default function Index() {
         <Link href="./exercises" asChild>
           <Pressable style={styles.box}>
             <Image source={require("../../../assets/images/icons/lifting.png")} style={styles.image}></Image>
-            <Text style={styles.text}>Exercises</Text>
+            <Text style={[globalStyles.text, {textAlign: "center"}]}>Exercises</Text>
           </Pressable>
         </Link>
-        <Link href="./split" asChild>
+        <Link href="./weight" asChild>
           <Pressable style={styles.box}>
             <Image source={require("../../../assets/images/icons/logbook.png")} style={styles.image}></Image>
-            <Text style={styles.text}>Something</Text>
+            <Text style={[globalStyles.text, {textAlign: "center"}]}>Weight</Text>
           </Pressable>
         </Link>
       </View>
@@ -61,9 +62,5 @@ const styles = StyleSheet.create({
     height: 80,
     width: 80,
     color: "black"
-  },
-  text: {
-    color: "black",
-    fontSize: 25
   }
 })

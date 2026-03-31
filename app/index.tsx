@@ -1,6 +1,6 @@
 import { useAuth } from "@/AuthContext";
 import { Button } from "@/components/Button";
-import { typography } from "@/styles";
+import { globalStyles, typography } from "@/styles";
 import { User } from "@/types/User";
 import { useSQLiteContext } from "expo-sqlite";
 import { useState } from "react";
@@ -51,14 +51,14 @@ export default function Login(){
                     
                     <TextInput 
                         placeholder="Email" 
-                        style={styles.input}
+                        style={globalStyles.input}
                         value={email}
                         onChangeText={onChangeEmail}
                     />
                     
                     <TextInput 
                         placeholder="Password" 
-                        style={styles.input}
+                        style={globalStyles.input}
                         value={password}
                         onChangeText={onChangePassword}
                         secureTextEntry={true}  
@@ -78,21 +78,21 @@ export default function Login(){
 
                     <TextInput 
                         placeholder="Name" 
-                        style={styles.input}
+                        style={globalStyles.input}
                         value={name}
                         onChangeText={onChangeName}
                     />
                     
                     <TextInput 
                         placeholder="Email" 
-                        style={styles.input}
+                        style={globalStyles.input}
                         value={email}
                         onChangeText={onChangeEmail}
                     />
                     
                     <TextInput 
                         placeholder="Password" 
-                        style={styles.input}
+                        style={globalStyles.input}
                         value={password}
                         onChangeText={onChangePassword}
                         secureTextEntry={true}  
@@ -116,15 +116,6 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         height: "100%",
         gap: 20
-    },
-    input: {
-        borderColor: "grey",
-        borderWidth: 1,
-        borderRadius: 15,
-        padding: 10,
-        width: 200,
-        margin: 5,
-        fontFamily: typography.regular
     },
     header: {
         fontFamily: typography.regular

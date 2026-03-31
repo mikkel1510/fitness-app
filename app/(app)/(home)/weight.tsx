@@ -1,10 +1,10 @@
 import { globalStyles } from "@/styles";
 import { Text, View } from "react-native";
 
-export default function Exercises(){
+export default function Weight(){
     return(
         <View>
-            <Text style={globalStyles.text}>See your exercises here!</Text>
+            <Text style={globalStyles.text}>Track your weight here!</Text>
         </View>
     )
 }

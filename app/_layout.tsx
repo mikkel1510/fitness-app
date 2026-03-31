@@ -15,7 +15,7 @@ export default function RootLayout(){
     }
 
     const [loaded] = useFonts({
-        ByteBounce: require("../assets/fonts/PublicPixel.ttf")
+        Manrope: require("../assets/fonts/Manrope-VariableFont_wght.ttf")
     })
 
     if (!loaded){

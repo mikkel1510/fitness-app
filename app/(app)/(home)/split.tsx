@@ -1,3 +1,4 @@
+import { globalStyles } from "@/styles";
 import { Link } from "expo-router";
 import { Pressable, Text, View } from "react-native";
 
@@ -6,7 +7,7 @@ export default function Split(){
         <View>
             <Link href="/" asChild>
                 <Pressable>
-                    <Text>See your training split here!</Text>
+                    <Text style={globalStyles.text}>See your training split here!</Text>
                 </Pressable>
             </Link>
         </View>

@@ -1,5 +1,6 @@
 import { useAuth } from "@/AuthContext";
 import { Button } from "@/components/Button";
+import { globalStyles } from "@/styles";
 import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
 import { FlatList, Text, TextInput, View } from "react-native";
@@ -38,14 +39,19 @@ export default function Log(){
 
     return(
         <View>
-            <Text>Log your training progress here!</Text>
-            <Text>Note</Text>
-            <TextInput value={text} onChangeText={onChangeText} placeholder="Write your note here"/>
+            <Text style={globalStyles.text}>Log your training progress here!</Text>
+            <Text style={globalStyles.text}>Note</Text>
+            <TextInput 
+                value={text} 
+                onChangeText={onChangeText} 
+                placeholder="Write your note here"
+                style={[globalStyles.input, {width: "auto"}]}
+            />
             <Button text="Save note"  onPress={insertLog}></Button>
             <FlatList
                 data={logs}
                 keyExtractor={(item) => item.id.toString()}
-                renderItem={({item}) => <Text>{item.text}</Text>} //TODO: Replace with some type of "note" component
+                renderItem={({item}) => <Text style={globalStyles.text}>{item.text}</Text>} //TODO: Replace with some type of "note" component
             />
         </View>
     )
