@@ -30,7 +30,7 @@ export default function Index() {
         </Link>
         <Link href="./weight" asChild>
           <Pressable style={styles.box}>
-            <Image source={require("../../../assets/images/icons/logbook.png")} style={styles.image}></Image>
+            <Image source={require("../../../assets/images/icons/scale-icon.png")} style={styles.image}></Image>
             <Text style={[globalStyles.text, {textAlign: "center"}]}>Weight</Text>
           </Pressable>
         </Link>
