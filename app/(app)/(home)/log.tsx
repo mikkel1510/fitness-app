@@ -40,7 +40,7 @@ export default function Log(){
     return(
         <View>
             <View style={globalStyles.section}>
-                <Text style={globalStyles.text}>Note</Text>
+                <Text style={globalStyles.sectionHeader}>Note</Text>
                 <TextInput 
                     value={text} 
                     onChangeText={onChangeText} 

@@ -3,7 +3,7 @@ import { Button } from "@/components/Button";
 import { globalStyles } from "@/styles";
 import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
-import { FlatList, Text, TextInput, View } from "react-native";
+import { FlatList, StyleSheet, Text, TextInput, View } from "react-native";
 
 export default function Weight(){
 
@@ -18,7 +18,7 @@ export default function Weight(){
                 "INSERT INTO weights (user_id, date, measurement) VALUES (?, ?, ?)",
                 currentUser!.id,
                 date,
-                inputWeight
+                inputWeight.replaceAll(",", ".")
             )
             getWeights()
         } else {
@@ -39,6 +39,11 @@ export default function Weight(){
         return regEx.test(num)
     }
 
+    const convertDate = (date: string): string => {
+        const formattedDate = new Date(date).toLocaleDateString("da-DK")
+        return formattedDate
+    }
+
     const date = new Date().toISOString().split("T")[0]; //TODO: Should be capable of selecting earlier date
     const [ inputWeight, onChangeInputWeight ] = useState("")
     const [ weights, setWeights ] = useState<any[]>([])
@@ -51,7 +56,7 @@ export default function Weight(){
     return(
         <View>
             <View style={globalStyles.section}>
-                <Text style={globalStyles.text}>Log weight</Text>
+                <Text style={globalStyles.sectionHeader}>Log weight</Text>
                 <View style={{flexDirection: "row"}}>
                     <Button onPress={() => {}} text="Today"/>
                     <TextInput 
@@ -65,19 +70,32 @@ export default function Weight(){
                 {inputError && <Text style={[globalStyles.text, {color: "red"}]}>Invalid input</Text>}
             </View>
             <View style={globalStyles.section}>
+                <Text style={globalStyles.sectionHeader}>Log</Text>
                 <FlatList
                     data={weights}
                     keyExtractor={(item) => item.id.toString()}
-                    renderItem={({item}) => <Text style={globalStyles.text}>{item.measurement}</Text>} //TODO: Replace with some type of "measurement" component
+                    renderItem={({item}) => 
+                        <View style={styles.weightItem}>
+                            <Text style={globalStyles.text}>{item.measurement} kg</Text>
+                            <Text style={globalStyles.text}>{convertDate(item.date)}</Text>
+                        </View>
+                    } //TODO: Replace with some type of "measurement" component
+                    ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
                 />
             </View>
             <View style={globalStyles.section}>
-                <Text style={globalStyles.text}>Weight for last week</Text> 
+                <Text style={globalStyles.sectionHeader}>Weekly progress</Text> 
             </View>
             <View style={globalStyles.section}>
-                <Text style={globalStyles.text}>Weight for last month</Text>
+                <Text style={globalStyles.sectionHeader}>Monthly progress</Text>
             </View>
-            <Button text="Tracking history" onPress={() => {}}></Button>
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+    weightItem: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+    }
+})

@@ -9,6 +9,12 @@ export const globalStyles = StyleSheet.create({
         fontFamily: typography.regular,
         fontSize: 20,
     },
+    sectionHeader: {
+        fontFamily: typography.regular,
+        fontSize: 30,
+        marginBottom: 10,
+        fontWeight: "bold"
+    },
     input: {
         borderColor: "grey",
         borderWidth: 1,
