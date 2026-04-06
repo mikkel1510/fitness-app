@@ -14,7 +14,6 @@ export default function Index() {
         </Link>
         <Link href="./log" asChild>
           <Pressable style={styles.box}>
-            <Pressable></Pressable>
             <Image source={require("../../../assets/images/icons/logbook.png")} style={styles.image}></Image>
             <Text style={[globalStyles.text, {textAlign: "center"}]}>Log</Text>
           </Pressable>  

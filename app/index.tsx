@@ -4,7 +4,7 @@ import { globalStyles, typography } from "@/styles";
 import { User } from "@/types/User";
 import { useSQLiteContext } from "expo-sqlite";
 import { useState } from "react";
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 export default function Login(){   
     const db = useSQLiteContext();
@@ -68,9 +68,9 @@ export default function Login(){
 
                     {incorrectInput && <Text style={styles.warning}>Incorrect email or password</Text>}
                     
-                    <Pressable onPress={() => setIsLogin(false)}>
-                        <Text style={{fontFamily: typography.regular}}>Sign up</Text>
-                    </Pressable>
+                    <TouchableOpacity onPress={() => setIsLogin(false)}>
+                        <Text style={{fontFamily: typography.regular, color: "blue"}}>Sign up</Text>
+                    </TouchableOpacity>
                 </View>
             ) : (
                 <View>

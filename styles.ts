@@ -30,5 +30,10 @@ export const globalStyles = StyleSheet.create({
         borderRadius: 20,
         padding: 10,
         margin: 20
+    },
+    sectionRow: {
+        flexDirection: "row", 
+        alignItems: "center", 
+        justifyContent: "space-between"
     }
 })

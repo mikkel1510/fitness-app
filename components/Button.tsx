@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
         backgroundColor: "black",
         padding: 10,
         borderRadius: 10,
+        justifyContent: "center"
     },
     text: {
         color: "white",

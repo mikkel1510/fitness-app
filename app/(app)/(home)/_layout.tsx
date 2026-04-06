@@ -7,7 +7,20 @@ export default function PagesLayout() {
                 name="index" 
                 options={{
                     headerShown: false
-                }}/>
+                }}
+            />
+            <Stack.Screen
+                name="weight/index"
+                options={{
+                    headerTitle: "Weight"
+                }}
+            />
+            <Stack.Screen
+                name="weight/all_weights"
+                options={{
+                    headerTitle: "All weights"
+                }}
+            />
         </Stack>
     )
 }

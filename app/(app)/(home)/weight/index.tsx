@@ -1,9 +1,13 @@
 import { useAuth } from "@/AuthContext";
 import { Button } from "@/components/Button";
-import { globalStyles } from "@/styles";
+import { WeightLog } from "@/components/WeightLog";
+import { globalStyles, typography } from "@/styles";
+import { convertDate } from "@/utils/date";
+import { checkWeightFormat } from "@/utils/formatting";
+import { Link } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
-import { FlatList, StyleSheet, Text, TextInput, View } from "react-native";
+import { FlatList, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 export default function Weight(){
 
@@ -12,7 +16,7 @@ export default function Weight(){
     
     
     const insertWeight = async () => {
-        if (checkFormat(inputWeight)) {
+        if (checkWeightFormat(inputWeight)) {
             onChangeInputError(false)
             await db.runAsync(
                 "INSERT INTO weights (user_id, date, measurement) VALUES (?, ?, ?)",
@@ -28,23 +32,14 @@ export default function Weight(){
 
     const getWeights = async () => {
         const result = await db.getAllAsync(
-            "SELECT * FROM weights WHERE user_id = ?",
+            "SELECT * FROM weights WHERE user_id = ? ORDER BY date DESC LIMIT 5",
             currentUser!.id
         )
         setWeights(result)
     }
 
-    const checkFormat = (num: string) => {
-        const regEx = /^[0-9]{1,3}([.,][0-9]{1,2})?$/ //Five digits, two of them optional decimals
-        return regEx.test(num)
-    }
-
-    const convertDate = (date: string): string => {
-        const formattedDate = new Date(date).toLocaleDateString("da-DK")
-        return formattedDate
-    }
-
     const date = new Date().toISOString().split("T")[0]; //TODO: Should be capable of selecting earlier date
+
     const [ inputWeight, onChangeInputWeight ] = useState("")
     const [ weights, setWeights ] = useState<any[]>([])
     const [ inputError, onChangeInputError ] = useState(false)
@@ -70,17 +65,23 @@ export default function Weight(){
                 {inputError && <Text style={[globalStyles.text, {color: "red"}]}>Invalid input</Text>}
             </View>
             <View style={globalStyles.section}>
-                <Text style={globalStyles.sectionHeader}>Log</Text>
+                <View style={globalStyles.sectionRow}>
+                    <Text style={globalStyles.sectionHeader}>Log <Text style={globalStyles.text}>(last 5)</Text></Text>
+                    
+                    <Link href="./weight/all_weights" asChild>
+                        <TouchableOpacity onPress={() => {}}>
+                                <Text style={{fontFamily: typography.regular, color: "blue"}}>View all</Text>
+                        </TouchableOpacity>
+                    </Link>
+                </View>
                 <FlatList
                     data={weights}
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={({item}) => 
-                        <View style={styles.weightItem}>
-                            <Text style={globalStyles.text}>{item.measurement} kg</Text>
-                            <Text style={globalStyles.text}>{convertDate(item.date)}</Text>
-                        </View>
-                    } //TODO: Replace with some type of "measurement" component
+                        <WeightLog measurement={item.measurement} date={convertDate(item.date)}/>
+                    }
                     ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+                    scrollEnabled={false}
                 />
             </View>
             <View style={globalStyles.section}>
@@ -92,10 +93,3 @@ export default function Weight(){
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    weightItem: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-    }
-})
