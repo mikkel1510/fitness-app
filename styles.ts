@@ -35,5 +35,17 @@ export const globalStyles = StyleSheet.create({
         flexDirection: "row", 
         alignItems: "center", 
         justifyContent: "space-between"
+    },
+    modalView: {
+        height: "100%", 
+        justifyContent: "center"
+    },
+    popUp: {
+        alignItems: "center",
+        height: "50%",
+        borderRadius: 20,
+        paddingTop: 100,
+        margin: 50,
+        backgroundColor: "white",
     }
 })

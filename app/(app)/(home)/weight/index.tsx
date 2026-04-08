@@ -7,7 +7,7 @@ import { checkWeightFormat } from "@/utils/formatting";
 import { Link } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
-import { FlatList, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { FlatList, Modal, Text, TextInput, TouchableOpacity, View } from "react-native";
 
 export default function Weight(){
 
@@ -17,13 +17,20 @@ export default function Weight(){
     
     const insertWeight = async () => {
         if (checkWeightFormat(inputWeight)) {
-            onChangeInputError(false)
-            await db.runAsync(
-                "INSERT INTO weights (user_id, date, measurement) VALUES (?, ?, ?)",
-                currentUser!.id,
-                date,
-                inputWeight.replaceAll(",", ".")
-            )
+            const element = weights.find(item => item.date === date) //Check if already logged today
+
+            if (!element){
+                onChangeInputError(false)
+                await db.runAsync(
+                    "INSERT INTO weights (user_id, date, measurement) VALUES (?, ?, ?)",
+                    currentUser!.id,
+                    date,
+                    inputWeight.replaceAll(",", ".")
+                )
+            } else {
+                setModalVisible(true)
+            }
+
             getWeights()
         } else {
             onChangeInputError(true)
@@ -43,6 +50,7 @@ export default function Weight(){
     const [ inputWeight, onChangeInputWeight ] = useState("")
     const [ weights, setWeights ] = useState<any[]>([])
     const [ inputError, onChangeInputError ] = useState(false)
+    const [ modalVisible, setModalVisible ] = useState(false)
 
     useEffect(() => {
         getWeights()
@@ -90,6 +98,18 @@ export default function Weight(){
             <View style={globalStyles.section}>
                 <Text style={globalStyles.sectionHeader}>Monthly progress</Text>
             </View>
+            <Modal
+                visible={modalVisible}
+                animationType="slide"
+                transparent={true}
+            >
+                <View style={globalStyles.modalView}>
+                    <View style={globalStyles.popUp}>
+                        <Text>You already logged today mf</Text>
+                        <Button onPress={() => setModalVisible(false)} text="Yes"></Button>
+                    </View>
+                </View>
+            </Modal>
         </View>
     )
 }
