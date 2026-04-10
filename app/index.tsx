@@ -101,7 +101,7 @@ export default function Login(){
                     <Button text="Sign up" onPress={() => signUp()}></Button>
                     
                     <Pressable onPress={() => setIsLogin(true)}>
-                        <Text style={{fontFamily: typography.regular}}>Back to login</Text>
+                        <Text style={{fontFamily: typography.regular, color: "blue"}}>Back to login</Text>
                     </Pressable>
                 </View>
             )

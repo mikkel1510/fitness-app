@@ -16,7 +16,7 @@ export default function AllWeights(){
     useEffect(() => {
         const fetchWeights = async () => {
             const result = await db.getAllAsync(
-                "SELECT * FROM weights WHERE user_id = ? ORDER BY date DESC",
+                "SELECT * FROM weights WHERE user_id = ? ORDER BY date ASC",
                 currentUser!.id
             )
             setWeights(result)

@@ -37,9 +37,19 @@ export default function Weight(){
         }
     }
 
+    const updateWeight = async() => {
+        await db.runAsync(
+            "UPDATE weights SET measurement = ? WHERE user_id = ? AND date = ?",
+            inputWeight,
+            currentUser!.id,
+            date
+        )
+        getWeights()
+    }
+
     const getWeights = async () => {
         const result = await db.getAllAsync(
-            "SELECT * FROM weights WHERE user_id = ? ORDER BY date DESC LIMIT 5",
+            "SELECT * FROM (SELECT * FROM weights WHERE user_id = ? ORDER BY date DESC LIMIT 5) sub ORDER BY DATE ASC",
             currentUser!.id
         )
         setWeights(result)
@@ -105,8 +115,12 @@ export default function Weight(){
             >
                 <View style={globalStyles.modalView}>
                     <View style={globalStyles.popUp}>
-                        <Text>You already logged today mf</Text>
-                        <Button onPress={() => setModalVisible(false)} text="Yes"></Button>
+                        <Text style={globalStyles.sectionHeader}>You already logged today mf</Text>
+                        <Text style={globalStyles.text}>Would you like to change today's measurment from x to {inputWeight}?</Text>
+                        <View style={{flexDirection: "row"}}>
+                            <Button onPress={() => {updateWeight(); setModalVisible(false)}} text="Yes"></Button>
+                            <Button onPress={() => setModalVisible(false)} text="No"></Button>
+                        </View>
                     </View>
                 </View>
             </Modal>
