@@ -1,0 +1,29 @@
+[
+    {
+        "id": 1,
+        "name": "Bench Press",
+        "primary_muscle": "Chest",
+        "secondary_muscles": [
+            "Triceps",
+            "Shoulders"
+        ]
+    },
+    {
+        "id": 2,
+        "name": "Barbell Back Squat",
+        "primary_muscle": "Quads",
+        "secondary_muscles": [
+            "Adductors",
+            "Glutes"
+        ]
+    },
+    {
+        "id": 1,
+        "name": "Lat Pulldown",
+        "primary_muscle": "Lats",
+        "secondary_muscles": [
+            "Biceps",
+            "Forearms"
+        ]
+    }
+]
