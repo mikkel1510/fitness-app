@@ -1,0 +1,20 @@
+[
+    {
+        "id": 1,
+        "name": "Push-Pull-Legs",
+        "frequency": 2,
+        "trainingDays": 6
+    },
+    {
+        "id": 2,
+        "name": "Full Body Every Other Day (FBEOD)",
+        "frequency": 3.5,
+        "trainingDays": 3.5
+    },
+    {
+        "id": 3,
+        "name": "Upper Lower",
+        "frequency": 2,
+        "trainingDays": 4
+    }
+]

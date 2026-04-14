@@ -18,12 +18,42 @@
         ]
     },
     {
-        "id": 1,
+        "id": 3,
         "name": "Lat Pulldown",
         "primary_muscle": "Lats",
         "secondary_muscles": [
             "Biceps",
             "Forearms"
+        ]
+    },
+    {
+        "id": 4,
+        "name": "JM Press",
+        "primary_muscle": "Triceps",
+        "secondary_muscles": [
+        ]
+    },
+    {
+        "id": 5,
+        "name": "Incline Bench Preacher Curl",
+        "primary_muscle": "Biceps",
+        "secondary_muscles": [
+        ]
+    },
+    {
+        "id": 6,
+        "name": "Cable Rope Crunches",
+        "primary_muscle": "Abs",
+        "secondary_muscles": [
+        ]
+    },
+    {
+        "id": 7,
+        "name": "Stiff-Legged Deadlift (SLDL)",
+        "primary_muscle": "Hamstrings",
+        "secondary_muscles": [
+            "Erectors",
+            "Glutes"
         ]
     }
 ]
