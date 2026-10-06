@@ -1,6 +1,6 @@
+import exercises from "@/exercises.json";
 import { globalStyles } from "@/styles";
 import { FlatList, Text, View } from "react-native";
-import exercises from "../../../exercises.json";
 
 export default function Exercises(){
 
@@ -17,7 +17,6 @@ export default function Exercises(){
                     </View>
                 }
             />
-    
         </View>
     )
 }

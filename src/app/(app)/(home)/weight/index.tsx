@@ -117,7 +117,7 @@ export default function Weight(){
                     <View style={globalStyles.popUp}>
                         <Text style={globalStyles.sectionHeader}>You already logged today mf</Text>
                         <Text style={globalStyles.text}>Would you like to change today's measurment from x to {inputWeight}?</Text>
-                        <View style={{flexDirection: "row"}}>
+                        <View style={{flexDirection: "row", gap: 8}}>
                             <Button onPress={() => {updateWeight(); setModalVisible(false)}} text="Yes"></Button>
                             <Button onPress={() => setModalVisible(false)} text="No"></Button>
                         </View>

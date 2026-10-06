@@ -1,6 +1,6 @@
+import splits from "@/splits.json";
 import { globalStyles } from "@/styles";
 import { FlatList, Text, View } from "react-native";
-import splits from "../../../splits.json";
 
 export default function Split(){
     return(

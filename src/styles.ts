@@ -38,13 +38,14 @@ export const globalStyles = StyleSheet.create({
     },
     modalView: {
         height: "100%", 
-        justifyContent: "center"
+        justifyContent: "center",
     },
     popUp: {
         alignItems: "center",
-        height: "50%",
+        height: "30%",
         borderRadius: 20,
-        paddingTop: 100,
+        paddingTop: 20,
+        paddingHorizontal: 16,
         margin: 50,
         backgroundColor: "white",
     }

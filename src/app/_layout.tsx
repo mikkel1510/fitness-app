@@ -16,7 +16,7 @@ export default function RootLayout(){
     }
 
     const [loaded] = useFonts({
-        Manrope: require("../assets/fonts/Manrope-VariableFont_wght.ttf")
+        Manrope: require("@/assets/fonts/Manrope-VariableFont_wght.ttf")
     })
 
     if (!loaded){
