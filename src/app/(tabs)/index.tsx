@@ -27,7 +27,7 @@ export default function Index() {
             <Text style={[globalStyles.text, {textAlign: "center"}]}>Exercises</Text>
           </Pressable>
         </Link>
-        <Link href="./weight" asChild>
+        <Link href="./(weight)" asChild>
           <Pressable style={styles.box}>
             <Image source={require("@/assets/images/icons/scale-icon.png")} style={styles.image}></Image>
             <Text style={[globalStyles.text, {textAlign: "center"}]}>Weight</Text>

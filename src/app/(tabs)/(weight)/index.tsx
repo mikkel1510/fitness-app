@@ -4,6 +4,7 @@ import { WeightLog } from "@/components/WeightLog";
 import { globalStyles, typography } from "@/styles";
 import { convertDate } from "@/utils/date";
 import { checkWeightFormat } from "@/utils/formatting";
+import { Calendar, toDateId } from "@marceloterreiro/flash-calendar";
 import { Link } from "expo-router";
 import { useSQLiteContext } from "expo-sqlite";
 import { useEffect, useState } from "react";
@@ -17,20 +18,19 @@ export default function Weight(){
     
     const insertWeight = async () => {
         if (checkWeightFormat(inputWeight)) {
-            const element = weights.find(item => item.date === date) //Check if already logged today
-
+            onChangeInputError(false)
+            const element = weights.find(item => item.date === todayString) //Check if already logged today
             if (!element){
-                onChangeInputError(false)
                 await db.runAsync(
                     "INSERT INTO weights (user_id, date, measurement) VALUES (?, ?, ?)",
                     currentUser!.id,
-                    date,
+                    todayString,
                     inputWeight.replaceAll(",", ".")
                 )
+                setTodayEntry(Number.parseInt(inputWeight))
             } else {
-                setModalVisible(true)
+                setConfirmModalVisible(true)
             }
-
             getWeights()
         } else {
             onChangeInputError(true)
@@ -42,8 +42,9 @@ export default function Weight(){
             "UPDATE weights SET measurement = ? WHERE user_id = ? AND date = ?",
             inputWeight,
             currentUser!.id,
-            date
+            todayString
         )
+        setTodayEntry(Number.parseInt(inputWeight))
         getWeights()
     }
 
@@ -55,12 +56,15 @@ export default function Weight(){
         setWeights(result)
     }
 
-    const date = new Date().toISOString().split("T")[0]; //TODO: Should be capable of selecting earlier date
-
+    const todayString = new Date().toISOString().split("T")[0] //TODO: shit from a butt
+    const today = toDateId(new Date())
+    const [ todayEntry, setTodayEntry ] = useState<number | null>(null)
+    const [selectedDate, setSelectedDate] = useState(today)
     const [ inputWeight, onChangeInputWeight ] = useState("")
     const [ weights, setWeights ] = useState<any[]>([])
     const [ inputError, onChangeInputError ] = useState(false)
-    const [ modalVisible, setModalVisible ] = useState(false)
+    const [ confirmModalVisible, setConfirmModalVisible ] = useState(false)
+    const [ calendarModalVisible, setCalendarModalVisible ] = useState(false)
 
     useEffect(() => {
         getWeights()
@@ -70,10 +74,10 @@ export default function Weight(){
         <View>
             <View style={globalStyles.section}>
                 <Text style={globalStyles.sectionHeader}>Log weight</Text>
-                <View style={{flexDirection: "row"}}>
-                    <Button onPress={() => {}} text="Today"/>
+                <Button text={selectedDate} onPress={() => setCalendarModalVisible(true)}/>
+                <View style={{flexDirection: "row", width: "100%"}}>
                     <TextInput 
-                        style={globalStyles.input} 
+                        style={[globalStyles.input, {flex: 1}]} 
                         value={inputWeight} 
                         onChangeText={onChangeInputWeight} 
                         placeholder="0.0" 
@@ -86,7 +90,7 @@ export default function Weight(){
                 <View style={globalStyles.sectionRow}>
                     <Text style={globalStyles.sectionHeader}>Log <Text style={globalStyles.text}>(last 5)</Text></Text>
                     
-                    <Link href="./weight/all_weights" asChild>
+                    <Link href="./all_weights" asChild>
                         <TouchableOpacity onPress={() => {}}>
                                 <Text style={{fontFamily: typography.regular, color: "blue"}}>View all</Text>
                         </TouchableOpacity>
@@ -109,17 +113,42 @@ export default function Weight(){
                 <Text style={globalStyles.sectionHeader}>Monthly progress</Text>
             </View>
             <Modal
-                visible={modalVisible}
+                    visible={calendarModalVisible}
+                    onRequestClose={() => setCalendarModalVisible(false)}
+                    transparent={true}
+                    animationType="slide"
+                >
+                    <View style={[globalStyles.popUp, {height: "50%"}]}>
+                        <View style={[globalStyles.modalView, {padding: 12}]}>
+                            <View style={{height: "80%"}}>
+                                <Calendar
+                                    calendarActiveDateRanges={[
+                                    {
+                                        startId: selectedDate,
+                                        endId: selectedDate,
+                                    },
+                                    ]}
+                                    calendarMaxDateId={today}
+                                    calendarMonthId={today}
+                                    onCalendarDayPress={() => {setSelectedDate; setCalendarModalVisible(false)}}
+                                />
+                            </View>
+                            <Button text="Cancel" onPress={() => setCalendarModalVisible(false)}/>
+                        </View>
+                    </View>
+                </Modal>
+            <Modal
+                visible={confirmModalVisible}
                 animationType="slide"
                 transparent={true}
             >
                 <View style={globalStyles.modalView}>
                     <View style={globalStyles.popUp}>
                         <Text style={globalStyles.sectionHeader}>You already logged today mf</Text>
-                        <Text style={globalStyles.text}>Would you like to change today's measurment from x to {inputWeight}?</Text>
+                        <Text style={globalStyles.text}>Would you like to change today's measurment from {todayEntry} to {inputWeight}?</Text>
                         <View style={{flexDirection: "row", gap: 8}}>
-                            <Button onPress={() => {updateWeight(); setModalVisible(false)}} text="Yes"></Button>
-                            <Button onPress={() => setModalVisible(false)} text="No"></Button>
+                            <Button onPress={() => {updateWeight(); setConfirmModalVisible(false)}} text="Yes"></Button>
+                            <Button onPress={() => setConfirmModalVisible(false)} text="No"></Button>
                         </View>
                     </View>
                 </View>

@@ -41,7 +41,7 @@ function RootNavigator(){
                 <Stack.Screen name={"index"} options={{ animation: "slide_from_bottom", animationDuration: 350 }}/>
             </Stack.Protected>
             <Stack.Protected guard={currentUser != null}>
-                <Stack.Screen name={"(app)"} options={{ animation: "fade", animationDuration: 350 }}/>
+                <Stack.Screen name={"(tabs)"} options={{ animation: "fade", animationDuration: 350 }}/>
             </Stack.Protected>
         </Stack>
     )

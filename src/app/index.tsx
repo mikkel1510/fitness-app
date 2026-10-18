@@ -53,6 +53,7 @@ export default function Login(){
                         placeholder="Email" 
                         style={globalStyles.input}
                         value={email}
+                        autoCapitalize="none"
                         onChangeText={onChangeEmail}
                     />
                     
