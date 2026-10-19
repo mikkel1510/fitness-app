@@ -2,7 +2,7 @@ import { useAuth } from "@/AuthContext";
 import { Button } from "@/components/Button";
 import { WeightLog } from "@/components/WeightLog";
 import { globalStyles, typography } from "@/styles";
-import { convertDate } from "@/utils/date";
+import { convertDate, cycleMonth } from "@/utils/date";
 import { checkWeightFormat } from "@/utils/formatting";
 import { Calendar, toDateId } from "@marceloterreiro/flash-calendar";
 import { Link } from "expo-router";
@@ -15,20 +15,20 @@ export default function Weight(){
     const { currentUser } = useAuth()
     const db = useSQLiteContext()
     
-    
     const insertWeight = async () => {
         if (checkWeightFormat(inputWeight)) {
             onChangeInputError(false)
-            const element = weights.find(item => item.date === todayString) //Check if already logged today
+
+            const element = await db.getFirstAsync<any>("SELECT * FROM weights WHERE user_id = ? AND date = ?", [currentUser!.id, selectedDate])
             if (!element){
                 await db.runAsync(
                     "INSERT INTO weights (user_id, date, measurement) VALUES (?, ?, ?)",
                     currentUser!.id,
-                    todayString,
+                    selectedDate,
                     inputWeight.replaceAll(",", ".")
                 )
-                setTodayEntry(Number.parseInt(inputWeight))
             } else {
+                setDateWeight(element.measurement)
                 setConfirmModalVisible(true)
             }
             getWeights()
@@ -42,27 +42,29 @@ export default function Weight(){
             "UPDATE weights SET measurement = ? WHERE user_id = ? AND date = ?",
             inputWeight,
             currentUser!.id,
-            todayString
+            selectedDate
         )
-        setTodayEntry(Number.parseInt(inputWeight))
         getWeights()
     }
 
     const getWeights = async () => {
         const result = await db.getAllAsync(
-            "SELECT * FROM (SELECT * FROM weights WHERE user_id = ? ORDER BY date DESC LIMIT 5) sub ORDER BY DATE ASC",
+            "SELECT * FROM (SELECT * FROM weights WHERE user_id = ? ORDER BY date DESC LIMIT 5) sub ORDER BY DATE DESC",
             currentUser!.id
         )
         setWeights(result)
     }
 
-    const todayString = new Date().toISOString().split("T")[0] //TODO: shit from a butt
+    const [ selectedDate, setSelectedDate ] = useState(new Date().toISOString().split("T")[0])
     const today = toDateId(new Date())
-    const [ todayEntry, setTodayEntry ] = useState<number | null>(null)
-    const [selectedDate, setSelectedDate] = useState(today)
+    const [ selectedDateId, setSelectedDateId ] = useState(today)
+    const [ monthId, setMonthId ] = useState(today)
+    
+    const [ dateWeight, setDateWeight ] = useState<number | null>(null)
     const [ inputWeight, onChangeInputWeight ] = useState("")
-    const [ weights, setWeights ] = useState<any[]>([])
     const [ inputError, onChangeInputError ] = useState(false)
+    const [ weights, setWeights ] = useState<any[]>([])
+    
     const [ confirmModalVisible, setConfirmModalVisible ] = useState(false)
     const [ calendarModalVisible, setCalendarModalVisible ] = useState(false)
 
@@ -74,7 +76,7 @@ export default function Weight(){
         <View>
             <View style={globalStyles.section}>
                 <Text style={globalStyles.sectionHeader}>Log weight</Text>
-                <Button text={selectedDate} onPress={() => setCalendarModalVisible(true)}/>
+                <Button text={selectedDateId} onPress={() => setCalendarModalVisible(true)}/>
                 <View style={{flexDirection: "row", width: "100%"}}>
                     <TextInput 
                         style={[globalStyles.input, {flex: 1}]} 
@@ -118,22 +120,26 @@ export default function Weight(){
                     transparent={true}
                     animationType="slide"
                 >
-                    <View style={[globalStyles.popUp, {height: "50%"}]}>
-                        <View style={[globalStyles.modalView, {padding: 12}]}>
-                            <View style={{height: "80%"}}>
+                    <View style={[globalStyles.modalView]}>
+                        <View style={[globalStyles.popUp]}>
+                            <View style={{height: "40%"}}>
                                 <Calendar
                                     calendarActiveDateRanges={[
                                     {
-                                        startId: selectedDate,
-                                        endId: selectedDate,
+                                        startId: selectedDateId,
+                                        endId: selectedDateId,
                                     },
                                     ]}
                                     calendarMaxDateId={today}
-                                    calendarMonthId={today}
-                                    onCalendarDayPress={() => {setSelectedDate; setCalendarModalVisible(false)}}
+                                    calendarMonthId={monthId}
+                                    onCalendarDayPress={(date) => {setSelectedDateId(date); setMonthId(date); setSelectedDate(new Date(date).toISOString().split("T")[0]); setCalendarModalVisible(false)}}
                                 />
+                            <View style={{flexDirection: "row", justifyContent: "space-between"}}>
+                                <Button onPress={() => {setMonthId(cycleMonth(monthId, -1))}} text="Prev"/>
+                                <Button onPress={() => {setMonthId(cycleMonth(monthId, 1))}} text="Next"/>
                             </View>
-                            <Button text="Cancel" onPress={() => setCalendarModalVisible(false)}/>
+                            </View>
+                            <Button text="Cancel" onPress={() => {setCalendarModalVisible(false); setMonthId(selectedDateId)}}/>
                         </View>
                     </View>
                 </Modal>
@@ -144,8 +150,8 @@ export default function Weight(){
             >
                 <View style={globalStyles.modalView}>
                     <View style={globalStyles.popUp}>
-                        <Text style={globalStyles.sectionHeader}>You already logged today mf</Text>
-                        <Text style={globalStyles.text}>Would you like to change today's measurment from {todayEntry} to {inputWeight}?</Text>
+                        <Text style={globalStyles.sectionHeader}>Existing entry on {selectedDate}</Text>
+                        <Text style={globalStyles.text}>Would you like to change the measurement from {dateWeight} to {inputWeight}?</Text>
                         <View style={{flexDirection: "row", gap: 8}}>
                             <Button onPress={() => {updateWeight(); setConfirmModalVisible(false)}} text="Yes"></Button>
                             <Button onPress={() => setConfirmModalVisible(false)} text="No"></Button>

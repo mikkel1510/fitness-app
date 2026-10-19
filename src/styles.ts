@@ -42,11 +42,11 @@ export const globalStyles = StyleSheet.create({
     },
     popUp: {
         alignItems: "center",
-        height: "30%",
         borderRadius: 20,
-        paddingTop: 20,
+        padding: 20,
         paddingHorizontal: 16,
         margin: 50,
         backgroundColor: "white",
+        justifyContent: "space-between",
     }
 })
