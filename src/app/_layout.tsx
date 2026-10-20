@@ -1,19 +1,10 @@
 import { AuthProvider, useAuth } from "@/AuthContext";
+import { createDbIfNeeded } from "@/database/database";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
-import { SQLiteDatabase, SQLiteProvider } from "expo-sqlite";
+import { SQLiteProvider } from "expo-sqlite";
 
 export default function RootLayout(){
-
-    const createDbIfNeeded = async (db: SQLiteDatabase) => {
-        await db.execAsync(
-            `
-            CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(100), email VARCHAR(254) UNIQUE, password TEXT); 
-            CREATE TABLE IF NOT EXISTS notes (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, text TEXT);
-            CREATE TABLE IF NOT EXISTS weights (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, date DATE, measurement DECIMAL(5,2));
-            `
-        )
-    }
 
     const [loaded] = useFonts({
         Manrope: require("@/assets/fonts/Manrope-VariableFont_wght.ttf")

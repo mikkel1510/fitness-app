@@ -53,7 +53,7 @@ export default function Login(){
                         placeholder="Email" 
                         style={globalStyles.input}
                         value={email}
-                        autoCapitalize="none"
+                        inputMode="email"
                         onChangeText={onChangeEmail}
                     />
                     
@@ -88,6 +88,7 @@ export default function Login(){
                         placeholder="Email" 
                         style={globalStyles.input}
                         value={email}
+                        inputMode="email"
                         onChangeText={onChangeEmail}
                     />
                     

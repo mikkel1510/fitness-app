@@ -1,5 +1,6 @@
 import { useAuth } from "@/AuthContext";
 import { WeightLog } from "@/components/WeightLog";
+import { getAllWeights } from "@/database/repositories/weightRepository";
 import { globalStyles } from "@/styles";
 import { convertDate } from "@/utils/date";
 import { useSQLiteContext } from "expo-sqlite";
@@ -15,10 +16,7 @@ export default function AllWeights(){
 
     useEffect(() => {
         const fetchWeights = async () => {
-            const result = await db.getAllAsync(
-                "SELECT * FROM weights WHERE user_id = ? ORDER BY date DESC",
-                currentUser!.id
-            )
+            const result = await getAllWeights(db, currentUser!.id)
             setWeights(result)
         }
         fetchWeights()

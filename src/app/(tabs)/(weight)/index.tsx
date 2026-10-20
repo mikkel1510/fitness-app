@@ -1,6 +1,7 @@
 import { useAuth } from "@/AuthContext";
 import { Button } from "@/components/Button";
 import { WeightLog } from "@/components/WeightLog";
+import { getAllWeights, getWeight, insertWeight, updateWeight } from "@/database/repositories/weightRepository";
 import { globalStyles, typography } from "@/styles";
 import { convertDate, cycleMonth } from "@/utils/date";
 import { checkWeightFormat } from "@/utils/formatting";
@@ -15,18 +16,12 @@ export default function Weight(){
     const { currentUser } = useAuth()
     const db = useSQLiteContext()
     
-    const insertWeight = async () => {
+    const enterWeight = async () => {
         if (checkWeightFormat(inputWeight)) {
             onChangeInputError(false)
-
-            const element = await db.getFirstAsync<any>("SELECT * FROM weights WHERE user_id = ? AND date = ?", [currentUser!.id, selectedDate])
+            const element = await getWeight(db, currentUser!.id, selectedDate)
             if (!element){
-                await db.runAsync(
-                    "INSERT INTO weights (user_id, date, measurement) VALUES (?, ?, ?)",
-                    currentUser!.id,
-                    selectedDate,
-                    inputWeight.replaceAll(",", ".")
-                )
+                insertWeight(db, currentUser!.id, selectedDate, inputWeight) 
             } else {
                 setDateWeight(element.measurement)
                 setConfirmModalVisible(true)
@@ -37,21 +32,13 @@ export default function Weight(){
         }
     }
 
-    const updateWeight = async() => {
-        await db.runAsync(
-            "UPDATE weights SET measurement = ? WHERE user_id = ? AND date = ?",
-            inputWeight,
-            currentUser!.id,
-            selectedDate
-        )
+    const updateSelectedWeight = async() => {
+        await updateWeight(db, currentUser!.id, inputWeight, selectedDate)
         getWeights()
     }
 
     const getWeights = async () => {
-        const result = await db.getAllAsync(
-            "SELECT * FROM (SELECT * FROM weights WHERE user_id = ? ORDER BY date DESC LIMIT 5) sub ORDER BY DATE DESC",
-            currentUser!.id
-        )
+        const result = await getAllWeights(db, currentUser!.id, 5)
         setWeights(result)
     }
 
@@ -84,7 +71,7 @@ export default function Weight(){
                         onChangeText={onChangeInputWeight} 
                         placeholder="0.0" 
                         keyboardType="decimal-pad"/>
-                    <Button onPress={insertWeight} text="Enter"/>
+                    <Button onPress={enterWeight} text="Enter"/>
                 </View>
                 {inputError && <Text style={[globalStyles.text, {color: "red"}]}>Invalid input</Text>}
             </View>
@@ -153,7 +140,7 @@ export default function Weight(){
                         <Text style={globalStyles.sectionHeader}>Existing entry on {selectedDate}</Text>
                         <Text style={globalStyles.text}>Would you like to change the measurement from {dateWeight} to {inputWeight}?</Text>
                         <View style={{flexDirection: "row", gap: 8}}>
-                            <Button onPress={() => {updateWeight(); setConfirmModalVisible(false)}} text="Yes"></Button>
+                            <Button onPress={() => {updateSelectedWeight(); setConfirmModalVisible(false)}} text="Yes"></Button>
                             <Button onPress={() => setConfirmModalVisible(false)} text="No"></Button>
                         </View>
                     </View>
